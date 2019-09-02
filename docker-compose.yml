@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:10
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  web:
+    build: .
+    volumes: 
+      - .:/DOVALJUNIPER
+    ports:
+      - "8000:8000"
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && echo 'Webserver start.' && python3 manage.py runserver 0.0.0.0:8000 && echo 'webserver down.'"
+    depends_on:
+      - db
+volumes:
+  postgres_data:
